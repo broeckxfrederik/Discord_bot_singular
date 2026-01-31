@@ -1,0 +1,16 @@
+{
+    "welcome_channel_id": 1466525184545656973,
+    "verification_category_id": 1466887760424992882,
+    "roles": {
+        "belgian": 1466526612265636106,
+        "foreigner": 1466526068394561546,
+        "border_control": 1466905302275457084,
+        "minister_foreign_affairs": 1466905580944887869,
+        "president": 1466905540528701544,
+        "vice_president": 1466905540528701544,
+        "government": 1466588522688413726
+    },
+    "welcome_message": "# Welcome to the Official Belgium War Era Server!\n\nGreetings, traveler! You have arrived at the gates of Belgium.\n\nPlease select your status below to proceed with verification:",
+    "ticket_counter": 25,
+    "log_channel_id": 1466891382634320077
+}
