@@ -21,6 +21,7 @@ import os
 import asyncio
 import datetime
 from dotenv import load_dotenv
+import secrets
 
 
 
@@ -36,7 +37,7 @@ DEFAULT_CONFIG = {
     "verification_category_id": None,     # Category for ticket channels
     "log_channel_id": None,               # Channel for government decision logs
     "roles": {
-        "belgian": None,                  # Role granted to approved citizens
+        "local_role": None,               # Role granted to approved citizens
         "foreigner": None,                # Role granted to approved foreigners
         "border_control": None,           # Moderators for citizen/foreigner requests
         "minister_foreign_affairs": None, # Embassy request handler
@@ -44,8 +45,8 @@ DEFAULT_CONFIG = {
         "vice_president": None,           # Embassy request handler
         "government": None                # Can view decision log channel
     },
-    "welcome_message": "# Welcome to the Official Belgium War Era Server!\n\n"
-                       "Greetings, traveler! You have arrived at the gates of Belgium.\n\n"
+    "welcome_message": "# Welcome to the Official Kuwait War Era Server!\n\n"
+                       "Greetings, traveler! You have arrived at the gates of Kuwait.\n\n"
                        "Please select your status below to proceed with verification:",
     "ticket_counter": 0  # Increments for each new ticket (used in channel names)
 }
@@ -154,6 +155,7 @@ async def create_verification_channel(interaction: discord.Interaction, request_
     """
     global config
     config = load_config()
+    password_length = 13
 
     guild = interaction.guild
     user = interaction.user
@@ -275,6 +277,13 @@ async def create_verification_channel(interaction: discord.Interaction, request_
         value="Use `/approve` to approve this request\nUse `/deny` to deny this request",
         inline=False
     )
+    embed.add_field(
+        name="Instructions for Requester",
+        value="Send any required information here.\nA moderator will review your request shortly.\n This includes a screenshot of your in-game passport.\n" \
+        "Please be patient!\n" \
+        "Send the following code to our MoFa as proof of your request:\n" + secrets.token_urlsafe(10),
+        inline=False
+    )
     embed.set_footer(text=f"User ID: {user.id}")
 
     # Send the ticket message, pinging relevant moderators
@@ -354,7 +363,7 @@ async def on_member_join(member: discord.Member):
 
 @bot.tree.command(name="setup-roles", description="Configure the roles for the verification system")
 @app_commands.describe(
-    belgian="The role given to approved citizens",
+    local_role="The role given to approved citizens",
     foreigner="The role given to approved foreigners",
     border_control="The role that handles citizen/foreigner requests",
     minister="The Minister of Foreign Affairs role",
@@ -365,7 +374,7 @@ async def on_member_join(member: discord.Member):
 @app_commands.default_permissions(administrator=True)
 async def setup_roles(
     interaction: discord.Interaction,
-    belgian: discord.Role = None,
+    local_role: discord.Role = None,
     foreigner: discord.Role = None,
     border_control: discord.Role = None,
     minister: discord.Role = None,
@@ -384,9 +393,9 @@ async def setup_roles(
     updated = []
 
     # Update each role if provided
-    if belgian:
-        config["roles"]["belgian"] = belgian.id
-        updated.append(f"Belgian: {belgian.mention}")
+    if local_role:
+        config["roles"]["local_role"] = local_role.id
+        updated.append(f"local_role: {local_role.mention}")
     if foreigner:
         config["roles"]["foreigner"] = foreigner.id
         updated.append(f"Foreigner: {foreigner.mention}")
@@ -583,7 +592,7 @@ async def approve(interaction: discord.Interaction, reason: str = "No reason pro
     Approve a verification request in the current ticket channel.
 
     This will:
-    1. Assign the appropriate role to the user (Belgian/Foreigner)
+    1. Assign the appropriate role to the user (local_role/Foreigner)
     2. Notify the user of approval
     3. Log the decision to the government log channel
     4. Delete the ticket channel after 30 seconds
@@ -651,7 +660,7 @@ async def approve(interaction: discord.Interaction, reason: str = "No reason pro
     role_to_give = None
 
     if request_type == "citizen":
-        role_to_give = interaction.guild.get_role(config["roles"]["belgian"])
+        role_to_give = interaction.guild.get_role(config["roles"]["local_role"])
     elif request_type == "foreigner":
         role_to_give = interaction.guild.get_role(config["roles"]["foreigner"])
     # Embassy requests don't grant a role
