@@ -45,9 +45,13 @@ DEFAULT_CONFIG = {
         "vice_president": None,           # Embassy request handler
         "government": None                # Can view decision log channel
     },
-    "welcome_message": "# Welcome to the Official Kuwait War Era Server!\n\n"
-                       "Greetings, traveler! You have arrived at the gates of Kuwait.\n\n"
-                       "Please select your status below to proceed with verification:",
+    "welcome_message": "# Assalamu alaikum, welcome to the Kuwaiti Hangout Zone!?\n" \
+    "So, you just want to chill with us? No problem! But first, we need to make sure you're not a lost tourist, a wandering sandstorm, or someone who thinks hummus is just a snack (it's a way of life here). ???????\n\n" \
+    "What do we need from you??\n" \
+    "A screenshot of your in-game passport (yes, even if you're just here for the vibes).?\n" \
+    "Our Tourist centre will check your request faster than you can say \"Yalla, let's go!\" But remember: \"Al-sabr miftah al-farah\" (Patience is the key to joy... and entry).?\n" \
+    "May your stay be as smooth as our coffee, and your memes as valuable as our oil. \n\n" \
+    "Shukran!?",
     "ticket_counter": 0  # Increments for each new ticket (used in channel names)
 }
 
@@ -58,7 +62,7 @@ def load_config() -> dict:
 
     If the file exists, loads it and merges with defaults to ensure
     all required keys exist. If not, returns a copy of defaults.
-    """
+    
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as f:
             config = json.load(f)
@@ -66,7 +70,7 @@ def load_config() -> dict:
             for key, value in DEFAULT_CONFIG.items():
                 if key not in config:
                     config[key] = value
-            return config
+            return config"""
     return DEFAULT_CONFIG.copy()
 
 
@@ -109,7 +113,7 @@ class WelcomeView(discord.ui.View):
         label="Citizen",
         style=discord.ButtonStyle.success,
         custom_id="welcome_citizen",
-        emoji="🇧🇪"
+        emoji="🇰🇼"
     )
     async def citizen_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         """Handle citizen verification request."""
@@ -157,6 +161,7 @@ async def create_verification_channel(interaction: discord.Interaction, request_
     config = load_config()
     password_length = 13
 
+    displayed_text = ""
     guild = interaction.guild
     user = interaction.user
 
@@ -171,11 +176,31 @@ async def create_verification_channel(interaction: discord.Interaction, request_
         role_ids = [config["roles"]["border_control"]]
         embed_color = discord.Color.green()
         request_title = "Citizenship Verification Request"
+        displayed_text = "Assalamu alaikum, welcome to the digital borders of Kuwait!?\n" \
+        "So you want to become a Kuwaiti citizen? Masha'Allah! But first, we need to make sure you're not a lost camel, a shady date merchant, or worse, a fan of that neighboring country. ???????\n\n"\
+        "What do we need??\n" \
+        "A screenshot of your in-game passport (no cat selfies unless your cat is Kuwaiti).?\n"\
+        "Our immigration Office will review your request. Be patient, because as our grandfathers always said: \"Al-sabr miftah al-farah\" (Patience is the key to joy... and access to our Discord channel).?\n"\
+        "Send this chill code to our Ministry of Foreign Affairs to prove you're not a spy (or worse, boring): ?\n\n"\
+        f"{secrets.token_urlsafe(10)}?\n\n"\
+
+        "May your access be granted swiftly, and may you never run out of oil!?\n"\
+        "Shukran!\n"
     elif request_type == "foreigner":
         channel_name = f"foreigner-{ticket_id}-{user.name}"
         role_ids = [config["roles"]["border_control"]]
         embed_color = discord.Color.blue()
         request_title = "Foreigner Verification Request"
+        displayed_text = "Assalamu alaikum, welcome to the Kuwaiti Hangout Zone!?\n" \
+        "So, you just want to chill with us? No problem! But first, we need to make sure you're not a lost tourist, a wandering sandstorm, or someone who thinks hummus is just a snack (it's a way of life here). ???????\n\n"\
+        "What do we need from you??\n"\
+        "A screenshot of your in-game passport (yes, even if you're just here for the vibes).?\n"\
+        "Our Tourist centre will check your request faster than you can say \"Yalla, let's go!\" But remember: \"Al-sabr miftah al-farah\" (Patience is the key to joy... and entry).?\n"\
+        "Send this chill code to our Ministry of Foreign Affairs to prove you're not a spy (or worse, boring): ?\n\n"\
+        f"{secrets.token_urlsafe(10)}?"\
+
+        "May your stay be as smooth as our coffee, and your memes as valuable as our oil. ?\n"\
+        "Shukran!?\n"
     else:  # embassy
         channel_name = f"embassy-{ticket_id}-{user.name}"
         # Embassy requests notify multiple high-level roles
@@ -186,6 +211,14 @@ async def create_verification_channel(interaction: discord.Interaction, request_
         ]
         embed_color = discord.Color.red()
         request_title = "Emergency Embassy Request"
+        displayed_text = "Assalamu alaikum, welcome to the Embassy of Kuwait!?\n" \
+        "So, you wish to enter the hallowed halls of our digital embassy? Excellent choice! But first, we must ensure you're not a rogue diplomat, a wandering desert trader, or heaven forbid a fan of that other Gulf country. ????????\n\n" \
+        "What do we require??\n"\
+        "A screenshot of your in-game passport (no, your selfie with a cat does not count).?\n"\
+        "Our esteemed moderators will review your request with the seriousness of a sheikh reviewing his camel herd. Patience is key, as they say: \"Al-sabr miftah al-farah\" (Patience is the key to joy... and embassy access).?\n"
+        "Send this top-secret code to our Ministry of Foreign Affairs as proof of your request:?\n\n"
+        f"{secrets.token_urlsafe(10)}?\n\n"\
+        "May your request be approved faster than a falcon in flight, and may your coffee always be strong. ?\n Shukran!?\n"
 
     # Sanitize channel name (Discord requires lowercase, no spaces, max 100 chars)
     channel_name = channel_name.lower().replace(" ", "-")[:100]
@@ -272,16 +305,16 @@ async def create_verification_channel(interaction: discord.Interaction, request_
         timestamp=datetime.datetime.now(datetime.UTC)
     )
     embed.set_thumbnail(url=user.display_avatar.url)
+   
+    embed.add_field(
+        name="Instructions for Requester",
+        value=displayed_text,
+        inline=False
+    )
+
     embed.add_field(
         name="Instructions for Moderators",
         value="Use `/approve` to approve this request\nUse `/deny` to deny this request",
-        inline=False
-    )
-    embed.add_field(
-        name="Instructions for Requester",
-        value="Send any required information here.\nA moderator will review your request shortly.\n This includes a screenshot of your in-game passport.\n" \
-        "Please be patient!\n" \
-        "Send the following code to our MoFa as proof of your request:\n" + secrets.token_urlsafe(10),
         inline=False
     )
     embed.set_footer(text=f"User ID: {user.id}")
