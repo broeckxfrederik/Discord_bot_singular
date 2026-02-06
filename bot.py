@@ -62,7 +62,7 @@ def load_config() -> dict:
 
     If the file exists, loads it and merges with defaults to ensure
     all required keys exist. If not, returns a copy of defaults.
-    
+    """
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as f:
             config = json.load(f)
@@ -70,7 +70,7 @@ def load_config() -> dict:
             for key, value in DEFAULT_CONFIG.items():
                 if key not in config:
                     config[key] = value
-            return config"""
+            return config
     return DEFAULT_CONFIG.copy()
 
 
@@ -183,7 +183,6 @@ async def create_verification_channel(interaction: discord.Interaction, request_
         "Our immigration Office will review your request. Be patient, because as our grandfathers always said: \"Al-sabr miftah al-farah\" (Patience is the key to joy... and access to our Discord channel).?\n"\
         "Send this chill code to our Ministry of Foreign Affairs to prove you're not a spy (or worse, boring): ?\n\n"\
         f"{secrets.token_urlsafe(10)}?\n\n"\
-
         "May your access be granted swiftly, and may you never run out of oil!?\n"\
         "Shukran!\n"
     elif request_type == "foreigner":
@@ -198,7 +197,6 @@ async def create_verification_channel(interaction: discord.Interaction, request_
         "Our Tourist centre will check your request faster than you can say \"Yalla, let's go!\" But remember: \"Al-sabr miftah al-farah\" (Patience is the key to joy... and entry).?\n"\
         "Send this chill code to our Ministry of Foreign Affairs to prove you're not a spy (or worse, boring): ?\n\n"\
         f"{secrets.token_urlsafe(10)}?"\
-
         "May your stay be as smooth as our coffee, and your memes as valuable as our oil. ?\n"\
         "Shukran!?\n"
     else:  # embassy
