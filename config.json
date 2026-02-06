@@ -1,16 +1,16 @@
 {
-    "welcome_channel_id": 1466525184545656973,
-    "verification_category_id": 1466887760424992882,
+    "welcome_channel_id": 1467590982508875879,
+    "verification_category_id": 1468643961160859801,
     "roles": {
-        "local_role": 1466526612265636106,
-        "foreigner": 1466526068394561546,
-        "border_control": 1466905302275457084,
-        "minister_foreign_affairs": 1466905580944887869,
-        "president": 1466905540528701544,
-        "vice_president": 1466905540528701544,
-        "government": 1466588522688413726
+        "local_role": 1467904589448609990,
+        "foreigner": 1468642396605775992,
+        "border_control": 1468632031452856492,
+        "minister_foreign_affairs": 1468644185295950045,
+        "president": 1468644269035356532,
+        "vice_president": 1468644365680251032,
+        "government": 1467591909361848341
     },
-    "welcome_message": "# Welcome to the Official Kuwait War Era Server!\n\nGreetings, traveler! You have arrived at the gates of Belgium.\n\nPlease select your status below to proceed with verification.\n\rPlease provide provide your passport when passport control starts (screenshot from ingame profile):",
+    "welcome_message": "# Welcome to the Official Kuwait War Era Server!\n\nGreetings, traveler! You have arrived at the gates of Kuwait.\n\nPlease select your status below to proceed with verification.\n\rPlease provide provide your passport when passport control starts (screenshot from ingame profile):",
     "ticket_counter": 0,
-    "log_channel_id": 1466891382634320077
+    "log_channel_id": 1468644634984190284
 }
